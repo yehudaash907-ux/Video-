@@ -1,0 +1,194 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Heebo";
+      font-weight: 900;
+      font-style: normal;
+      src: url("assets/fonts/heebo-hebrew-900-normal.woff2") format("woff2");
+      unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+    }
+    @font-face {
+      font-family: "Heebo";
+      font-weight: 900;
+      font-style: normal;
+      src: url("assets/fonts/heebo-latin-900-normal.woff2") format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+        U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    @font-face {
+      font-family: "Heebo";
+      font-weight: 500;
+      font-style: normal;
+      src: url("assets/fonts/heebo-hebrew-500-normal.woff2") format("woff2");
+      unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+    }
+    @font-face {
+      font-family: "Heebo";
+      font-weight: 500;
+      font-style: normal;
+      src: url("assets/fonts/heebo-latin-500-normal.woff2") format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+        U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    #code-ground {
+      position: absolute;
+      inset: 0;
+      background: var(--color-ground, #f2c12e);
+    }
+    /* Full-canvas slab cut to a rectangle by clip-path, so the morph into the film band is one tween. */
+    #code-slab {
+      position: absolute;
+      inset: 0;
+      background: var(--color-ink, #111111);
+      clip-path: inset(310px 960px 390px 160px);
+    }
+    #code-lines {
+      position: absolute;
+      left: 208px;
+      top: 350px;
+      direction: ltr;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 400;
+      font-size: 38px;
+      line-height: 60px;
+      color: var(--color-paper, #f6f1e6);
+    }
+    .code-line {
+      display: block;
+      width: max-content;
+      white-space: pre;
+      clip-path: inset(0 100% 0 0);
+    }
+    .code-tag {
+      color: var(--color-ground, #f2c12e);
+    }
+    .code-head {
+      position: absolute;
+      right: 192px;
+      direction: rtl;
+      text-align: right;
+      font-family: "Heebo", sans-serif;
+      font-weight: 900;
+      font-size: 150px;
+      line-height: 150px;
+      letter-spacing: -0.02em;
+      color: var(--color-ink, #111111);
+      white-space: nowrap;
+    }
+    #code-head-1 {
+      top: 300px;
+    }
+    #code-head-2 {
+      top: 450px;
+      color: var(--color-accent, #2340e0);
+    }
+    #code-sub {
+      position: absolute;
+      right: 192px;
+      top: 628px;
+      direction: rtl;
+      text-align: right;
+      font-family: "Heebo", sans-serif;
+      font-weight: 500;
+      font-size: 56px;
+      line-height: 68px;
+      color: var(--color-ink, #111111);
+      white-space: nowrap;
+    }
+  </style>
+  <div
+    id="root"
+    data-composition-id="code"
+    data-width="1920"
+    data-height="1080"
+    data-composition-variables='[
+      {"id":"code-head-1","type":"string","label":"Headline, line 1","default":"כותבים"},
+      {"id":"code-head-2","type":"string","label":"Headline, line 2 (accent)","default":"HTML"},
+      {"id":"code-sub","type":"string","label":"Subline","default":"קוד רגיל, בדפדפן רגיל"}
+    ]'
+  >
+    <div id="code-ground"></div>
+    <div id="code-slab">
+      <div id="code-lines">
+        <span id="code-l1" class="code-line"><span class="code-tag">&lt;div</span> class="clip"</span>
+        <span id="code-l2" class="code-line">     data-start="0"</span>
+        <span id="code-l3" class="code-line">     data-duration="3"<span class="code-tag">&gt;</span></span>
+        <span id="code-l4" class="code-line">  <span class="code-tag">&lt;h1&gt;</span>Hello, frames<span class="code-tag">&lt;/h1&gt;</span></span>
+        <span id="code-l5" class="code-line"><span class="code-tag">&lt;/div&gt;</span></span>
+      </div>
+    </div>
+    <div id="code-head-1" class="code-head" data-var-text="code-head-1">כותבים</div>
+    <div id="code-head-2" class="code-head" data-var-text="code-head-2">HTML</div>
+    <div id="code-sub" data-var-text="code-sub">קוד רגיל, בדפדפן רגיל</div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+
+      // Slab whips in from the left and sharpens.
+      tl.fromTo(
+        "#code-slab",
+        { x: -300, filter: "blur(14px)" },
+        { x: 0, filter: "blur(0px)", duration: 0.55, ease: "expo.out" },
+        0,
+      );
+
+      // Typing: one step per character on a monospace line.
+      const lines = [
+        ["#code-l1", 17],
+        ["#code-l2", 19],
+        ["#code-l3", 22],
+        ["#code-l4", 24],
+        ["#code-l5", 6],
+      ];
+      let t = 0.22;
+      lines.forEach(([sel, chars]) => {
+        const d = chars * 0.013;
+        tl.fromTo(
+          sel,
+          { clipPath: "inset(0 100% 0 0)" },
+          { clipPath: "inset(0 0% 0 0)", duration: d, ease: "steps(" + chars + ")" },
+          t,
+        );
+        t += d + 0.03;
+      });
+
+      // Headline: line 1 is on screen from frame 0 (the thumbnail); line 2 and the subline blur in.
+      tl.fromTo(
+        "#code-head-2",
+        { opacity: 0, filter: "blur(8px)" },
+        { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out" },
+        0.3,
+      );
+      tl.fromTo(
+        "#code-sub",
+        { opacity: 0, filter: "blur(8px)" },
+        { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out" },
+        0.75,
+      );
+
+      // Exit: words blur out, then the slab grows into the film band of the next scene.
+      tl.to(["#code-head-1", "#code-head-2", "#code-sub"], {
+        opacity: 0,
+        filter: "blur(8px)",
+        duration: 0.16,
+        stagger: 0.04,
+        ease: "power3.in",
+      }, 2.55);
+      tl.to("#code-lines", { opacity: 0, filter: "blur(6px)", duration: 0.18, ease: "power3.in" }, 2.66);
+      tl.fromTo(
+        "#code-slab",
+        { clipPath: "inset(310px 960px 390px 160px)" },
+        { clipPath: "inset(390px 0px 390px 0px)", duration: 0.52, ease: "power3.inOut", immediateRender: false },
+        2.66,
+      );
+
+      window.__timelines["code"] = tl;
+    })();
+  </script>
+</template>

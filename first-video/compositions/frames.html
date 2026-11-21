@@ -1,0 +1,395 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Heebo";
+      font-weight: 900;
+      font-style: normal;
+      src: url("assets/fonts/heebo-hebrew-900-normal.woff2") format("woff2");
+      unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+    }
+    @font-face {
+      font-family: "Heebo";
+      font-weight: 900;
+      font-style: normal;
+      src: url("assets/fonts/heebo-latin-900-normal.woff2") format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+        U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    @font-face {
+      font-family: "Heebo";
+      font-weight: 500;
+      font-style: normal;
+      src: url("assets/fonts/heebo-hebrew-500-normal.woff2") format("woff2");
+      unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+    }
+    @font-face {
+      font-family: "Heebo";
+      font-weight: 500;
+      font-style: normal;
+      src: url("assets/fonts/heebo-latin-500-normal.woff2") format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+        U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    #frames-ground {
+      position: absolute;
+      inset: 0;
+      background: var(--color-ground, #f2c12e);
+    }
+    .strip {
+      position: absolute;
+      left: 0;
+      top: 390px;
+      width: 1920px;
+      height: 300px;
+      transform-origin: 960px 150px;
+    }
+    .strip-solid,
+    .strip-fill {
+      position: absolute;
+      left: -2000px;
+      width: 5920px;
+      background: var(--color-ink, #111111);
+    }
+    .strip-fill {
+      height: 18px;
+    }
+    .strip-row {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 300px;
+    }
+    .strip-holes {
+      position: absolute;
+      left: -3000px;
+      width: 7920px;
+      height: 18px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--color-ink, #111111) 0 26px,
+        transparent 26px 56px
+      );
+    }
+    .film-frame {
+      position: absolute;
+      top: 60px;
+      width: 320px;
+      height: 180px;
+      background: var(--color-paper, #f6f1e6);
+      overflow: hidden;
+    }
+    .film-floor {
+      position: absolute;
+      left: 20px;
+      top: 160px;
+      width: 280px;
+      height: 4px;
+      background: var(--color-ink, #111111);
+    }
+    .film-ball {
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--color-ink, #111111);
+    }
+    .frames-head {
+      position: absolute;
+      right: 192px;
+      direction: rtl;
+      text-align: right;
+      font-family: "Heebo", sans-serif;
+      font-weight: 900;
+      font-size: 104px;
+      line-height: 112px;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+    #frames-head-a {
+      top: 140px;
+      color: var(--color-ink, #111111);
+    }
+    #frames-head-b {
+      top: 110px;
+      color: var(--color-ground, #f2c12e);
+    }
+    #frames-sub-b {
+      position: absolute;
+      right: 192px;
+      top: 872px;
+      direction: rtl;
+      text-align: right;
+      font-family: "Heebo", sans-serif;
+      font-weight: 500;
+      font-size: 52px;
+      line-height: 64px;
+      color: var(--color-ground, #f2c12e);
+      white-space: nowrap;
+    }
+    #frames-counter {
+      position: absolute;
+      right: 192px;
+      top: 738px;
+      display: flex;
+      direction: rtl;
+      align-items: baseline;
+      gap: 28px;
+      white-space: nowrap;
+    }
+    #frames-counter-label {
+      font-family: "Heebo", sans-serif;
+      font-weight: 500;
+      font-size: 56px;
+      color: var(--color-ink, #111111);
+    }
+    #frames-count {
+      direction: ltr;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 700;
+      font-size: 120px;
+      line-height: 130px;
+      color: var(--color-accent, #2340e0);
+    }
+  </style>
+  <div
+    id="root"
+    data-composition-id="frames"
+    data-width="1920"
+    data-height="1080"
+    data-composition-variables='[
+      {"id":"frames-head-a","type":"string","label":"Headline, frames beat","default":"מקבלים וידאו"},
+      {"id":"frames-counter-label","type":"string","label":"Counter label","default":"פריים"},
+      {"id":"frames-head-b","type":"string","label":"Headline, identical beat","default":"כל רינדור — אותו סרט"},
+      {"id":"frames-sub-b","type":"string","label":"Subline, identical beat","default":"גם בשני, בשלישי ובמאה"}
+    ]'
+  >
+    <div id="frames-ground"></div>
+    <div id="strip-b" class="strip" data-layout-allow-overflow>
+      <div class="strip-solid" style="top: 0; height: 21px"></div>
+      <div class="strip-solid" style="top: 39px; height: 222px"></div>
+      <div class="strip-solid" style="top: 279px; height: 21px"></div>
+      <div id="strip-b-row" class="strip-row">
+        <div class="strip-holes" style="top: 21px"></div>
+        <div class="strip-holes" style="top: 261px"></div>
+          <div id="strip-b-f0" class="film-frame strip-b-frame" style="left: -2880px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 42px; top: 65px"></div>
+          </div>
+          <div id="strip-b-f1" class="film-frame strip-b-frame" style="left: -2520px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 57px; top: 29px"></div>
+          </div>
+          <div id="strip-b-f2" class="film-frame strip-b-frame" style="left: -2160px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 72px; top: 29px"></div>
+          </div>
+          <div id="strip-b-f3" class="film-frame strip-b-frame" style="left: -1800px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 87px; top: 65px"></div>
+          </div>
+          <div id="strip-b-f4" class="film-frame strip-b-frame" style="left: -1440px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 102px; top: 124px"></div>
+          </div>
+          <div id="strip-b-f5" class="film-frame strip-b-frame" style="left: -1080px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 117px; top: 65px"></div>
+          </div>
+          <div id="strip-b-f6" class="film-frame strip-b-frame" style="left: -720px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 132px; top: 29px"></div>
+          </div>
+          <div id="strip-b-f7" class="film-frame strip-b-frame" style="left: -360px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 147px; top: 29px"></div>
+          </div>
+          <div id="strip-b-f8" class="film-frame strip-b-frame" style="left: 0px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 162px; top: 65px"></div>
+          </div>
+          <div id="strip-b-f9" class="film-frame strip-b-frame" style="left: 360px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 177px; top: 124px"></div>
+          </div>
+          <div id="strip-b-f10" class="film-frame strip-b-frame" style="left: 720px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 192px; top: 65px"></div>
+          </div>
+          <div id="strip-b-f11" class="film-frame strip-b-frame" style="left: 1080px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 207px; top: 29px"></div>
+          </div>
+          <div id="strip-b-f12" class="film-frame strip-b-frame" style="left: 1440px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 222px; top: 29px"></div>
+          </div>
+          <div id="strip-b-f13" class="film-frame strip-b-frame" style="left: 1800px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 237px; top: 65px"></div>
+          </div>
+          <div id="strip-b-f14" class="film-frame strip-b-frame" style="left: 2160px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 252px; top: 124px"></div>
+          </div>
+      </div>
+    </div>
+    <div id="strip-a" class="strip" data-layout-allow-overflow>
+      <div class="strip-solid" style="top: 0; height: 21px"></div>
+      <div class="strip-solid" style="top: 39px; height: 222px"></div>
+      <div class="strip-solid" style="top: 279px; height: 21px"></div>
+      <div class="strip-fill strip-a-fill" style="top: 21px"></div>
+      <div class="strip-fill strip-a-fill" style="top: 261px"></div>
+      <div id="strip-a-row" class="strip-row">
+        <div class="strip-holes" style="top: 21px"></div>
+        <div class="strip-holes" style="top: 261px"></div>
+          <div id="strip-a-f0" class="film-frame strip-a-frame" style="left: -2880px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 42px; top: 65px"></div>
+          </div>
+          <div id="strip-a-f1" class="film-frame strip-a-frame" style="left: -2520px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 57px; top: 29px"></div>
+          </div>
+          <div id="strip-a-f2" class="film-frame strip-a-frame" style="left: -2160px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 72px; top: 29px"></div>
+          </div>
+          <div id="strip-a-f3" class="film-frame strip-a-frame" style="left: -1800px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 87px; top: 65px"></div>
+          </div>
+          <div id="strip-a-f4" class="film-frame strip-a-frame" style="left: -1440px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 102px; top: 124px"></div>
+          </div>
+          <div id="strip-a-f5" class="film-frame strip-a-frame" style="left: -1080px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 117px; top: 65px"></div>
+          </div>
+          <div id="strip-a-f6" class="film-frame strip-a-frame" style="left: -720px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 132px; top: 29px"></div>
+          </div>
+          <div id="strip-a-f7" class="film-frame strip-a-frame" style="left: -360px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 147px; top: 29px"></div>
+          </div>
+          <div id="strip-a-f8" class="film-frame strip-a-frame" style="left: 0px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 162px; top: 65px"></div>
+          </div>
+          <div id="strip-a-f9" class="film-frame strip-a-frame" style="left: 360px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 177px; top: 124px"></div>
+          </div>
+          <div id="strip-a-f10" class="film-frame strip-a-frame" style="left: 720px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 192px; top: 65px"></div>
+          </div>
+          <div id="strip-a-f11" class="film-frame strip-a-frame" style="left: 1080px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 207px; top: 29px"></div>
+          </div>
+          <div id="strip-a-f12" class="film-frame strip-a-frame" style="left: 1440px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 222px; top: 29px"></div>
+          </div>
+          <div id="strip-a-f13" class="film-frame strip-a-frame" style="left: 1800px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 237px; top: 65px"></div>
+          </div>
+          <div id="strip-a-f14" class="film-frame strip-a-frame" style="left: 2160px">
+            <div class="film-floor"></div>
+            <div class="film-ball" style="left: 252px; top: 124px"></div>
+          </div>
+      </div>
+    </div>
+    <div id="frames-head-a" class="frames-head" data-var-text="frames-head-a">מקבלים וידאו</div>
+    <div id="frames-counter">
+      <span id="frames-counter-label" data-var-text="frames-counter-label">פריים</span>
+      <span id="frames-count">001</span>
+    </div>
+    <div id="frames-head-b" class="frames-head" data-var-text="frames-head-b">כל רינדור — אותו סרט</div>
+    <div id="frames-sub-b" data-var-text="frames-sub-b">גם בשני, בשלישי ובמאה</div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const blurIn = { opacity: 0, filter: "blur(8px)" };
+      const sharp = { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out" };
+
+      // Start state matches the end of the code scene: one solid black band.
+
+      // The film travels at constant speed for the whole scene; both renders share one move.
+      tl.fromTo(["#strip-a-row", "#strip-b-row"], { x: 0 }, { x: 1000, duration: 6.4, ease: "none" }, 0);
+
+      // Beat A: holes punch through, frames build in from the right, the counter runs.
+      tl.fromTo(".strip-a-fill", { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "power2.out" }, 0.05);
+      tl.fromTo(
+        ".strip-a-frame",
+        { opacity: 0, scale: 0.9 },
+        { opacity: 1, scale: 1, duration: 0.32, ease: "expo.out", stagger: { each: 0.04, from: "end" } },
+        0.12,
+      );
+      tl.fromTo("#frames-head-a", blurIn, sharp, 0.3);
+      tl.fromTo("#frames-counter", blurIn, sharp, 0.45);
+      const counter = { v: 1 };
+      const countEl = document.querySelector("#frames-count");
+      tl.fromTo(
+        counter,
+        { v: 1 },
+        {
+          v: 180,
+          duration: 2.4,
+          ease: "none",
+          onUpdate: () => {
+            countEl.textContent = String(Math.round(counter.v)).padStart(3, "0");
+          },
+        },
+        0.45,
+      );
+      tl.to(["#frames-head-a", "#frames-counter"], {
+        opacity: 0,
+        filter: "blur(8px)",
+        duration: 0.16,
+        stagger: 0.04,
+        ease: "power3.in",
+      }, 2.95);
+
+      // Beat B: the ground floods blue, render A lifts, render B rises in below in sync.
+      tl.fromTo(
+        "#frames-ground",
+        { backgroundColor: "#f2c12e" },
+        { backgroundColor: "#2340e0", duration: 0.4, ease: "power2.inOut" },
+        3.15,
+      );
+      tl.fromTo("#strip-a", { y: 0, scale: 1 }, { y: -175, scale: 0.78, duration: 0.6, ease: "power3.inOut" }, 3.2);
+      tl.fromTo("#strip-b", { y: 700, scale: 0.78 }, { y: 175, scale: 0.78, duration: 0.65, ease: "expo.out" }, 3.32);
+      tl.fromTo("#frames-head-b", blurIn, sharp, 3.55);
+      tl.fromTo("#frames-sub-b", blurIn, sharp, 3.95);
+      tl.to(["#frames-head-b", "#frames-sub-b"], {
+        opacity: 0,
+        filter: "blur(8px)",
+        duration: 0.15,
+        stagger: 0.04,
+        ease: "power3.in",
+      }, 5.85);
+
+      // Whip: both strips accelerate off to the right; the cut lands mid-move.
+      tl.fromTo(
+        ["#strip-a", "#strip-b"],
+        { x: 0, filter: "blur(0px)" },
+        { x: 2600, filter: "blur(16px)", duration: 0.42, ease: "power3.in", immediateRender: false },
+        6.05,
+      );
+
+      window.__timelines["frames"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,91 @@
+<!doctype html>
+<html
+  lang="he"
+  data-composition-variables='[
+    {"id":"color-ground","type":"color","label":"Background","default":"#F2C12E"},
+    {"id":"color-ink","type":"color","label":"Text","default":"#111111"},
+    {"id":"color-accent","type":"color","label":"Accent","default":"#2340E0"},
+    {"id":"color-paper","type":"color","label":"Film frames","default":"#F6F1E6"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --color-ground: #f2c12e;
+        --color-ink: #111111;
+        --color-accent: #2340e0;
+        --color-paper: #f6f1e6;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--color-ground);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="12.6"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div
+        id="code"
+        data-composition-id="code"
+        data-composition-src="compositions/code.html"
+        data-start="0"
+        data-duration="3.2"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+      <div
+        id="frames"
+        data-composition-id="frames"
+        data-composition-src="compositions/frames.html"
+        data-start="3.2"
+        data-duration="6.4"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+      <div
+        id="endcard"
+        data-composition-id="endcard"
+        data-composition-src="compositions/endcard.html"
+        data-start="9.6"
+        data-duration="3"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

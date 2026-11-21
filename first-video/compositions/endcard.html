@@ -1,0 +1,109 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Heebo";
+      font-weight: 900;
+      font-style: normal;
+      src: url("assets/fonts/heebo-hebrew-900-normal.woff2") format("woff2");
+      unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+    }
+    @font-face {
+      font-family: "Heebo";
+      font-weight: 900;
+      font-style: normal;
+      src: url("assets/fonts/heebo-latin-900-normal.woff2") format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+        U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    @font-face {
+      font-family: "Heebo";
+      font-weight: 500;
+      font-style: normal;
+      src: url("assets/fonts/heebo-hebrew-500-normal.woff2") format("woff2");
+      unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+    }
+    @font-face {
+      font-family: "Heebo";
+      font-weight: 500;
+      font-style: normal;
+      src: url("assets/fonts/heebo-latin-500-normal.woff2") format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+        U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    #end-ground {
+      position: absolute;
+      inset: 0;
+      background: var(--color-ground, #f2c12e);
+    }
+    #end-title {
+      position: absolute;
+      right: 192px;
+      top: 330px;
+      direction: ltr;
+      text-align: right;
+      font-family: "Heebo", sans-serif;
+      font-weight: 900;
+      font-size: 230px;
+      line-height: 240px;
+      letter-spacing: -0.03em;
+      color: var(--color-ink, #111111);
+      white-space: nowrap;
+    }
+    #end-title-accent {
+      color: var(--color-accent, #2340e0);
+    }
+    #end-sub {
+      position: absolute;
+      right: 200px;
+      top: 620px;
+      direction: rtl;
+      text-align: right;
+      font-family: "Heebo", sans-serif;
+      font-weight: 500;
+      font-size: 64px;
+      line-height: 80px;
+      color: var(--color-ink, #111111);
+      white-space: nowrap;
+    }
+  </style>
+  <div
+    id="root"
+    data-composition-id="endcard"
+    data-width="1920"
+    data-height="1080"
+    data-composition-variables='[
+      {"id":"end-title-main","type":"string","label":"Title","default":"Hyper"},
+      {"id":"end-title-accent","type":"string","label":"Title, accent part","default":"Frames"},
+      {"id":"end-sub","type":"string","label":"Subline","default":"הסרטון הראשון של הפרויקט"}
+    ]'
+  >
+    <div id="end-ground"></div>
+    <div id="end-title"><span id="end-title-main" data-var-text="end-title-main">Hyper</span><span id="end-title-accent" data-var-text="end-title-accent">Frames</span></div>
+    <div id="end-sub" data-var-text="end-sub">הסרטון הראשון של הפרויקט</div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+
+      // The name arrives with the whip from the left, blurred, and sharpens as it lands.
+      tl.fromTo("#end-title", { x: -320 }, { x: 0, duration: 0.5, ease: "expo.out" }, 0);
+      tl.fromTo("#end-title", { filter: "blur(14px)" }, { filter: "blur(0px)", duration: 0.22, ease: "power2.out" }, 0);
+
+      // The subline blurs in once the name has landed, then everything holds still.
+      tl.fromTo(
+        "#end-sub",
+        { opacity: 0, filter: "blur(8px)" },
+        { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" },
+        0.55,
+      );
+      tl.set({}, {}, 3);
+
+      window.__timelines["endcard"] = tl;
+    })();
+  </script>
+</template>
